@@ -1,5 +1,8 @@
 {
 	"MailSettings": {
-		"ToAddress" : "remus.moisi@outlook.com"
+		"ToAddress": "remus.moisi@outlook.com"
+	},
+	"ConnectionStrings": {
+		"WorldContextConnection": "Server=Q028\\SQL2012;Database=WorldTripsDatabase;Trusted_Connection=true;MultipleActiveResultSets=true;"
 	}
 }

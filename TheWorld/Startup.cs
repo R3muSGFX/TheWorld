@@ -2,14 +2,14 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using TheWorld.Models;
 using TheWorld.Service;
 
 namespace TheWorld
 {
 	public class Startup
     {
-		private IHostingEnvironment _env;
-		private IConfigurationRoot _config;
 
 		public Startup(IHostingEnvironment env)
 		{
@@ -21,7 +21,9 @@ namespace TheWorld
 			_config = builder.Build();
 		}
 
-        public void ConfigureServices(IServiceCollection services)
+		#region Methods
+
+		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddSingleton(_config);
 
@@ -29,14 +31,27 @@ namespace TheWorld
 			{
 				services.AddScoped<IMailService, DebugMailService>();
 			}
+
+			services.AddDbContext<WorldContext>();
+			services.AddScoped<IWorldRepository, WorldRepository>();
+			services.AddTransient<WorldContextSeedData>();
+			services.AddLogging();
 			services.AddMvc();
 		}
         
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, 
+			IHostingEnvironment env,
+			WorldContextSeedData seeder,
+			ILoggerFactory factory)
         {
 			if (!env.IsProduction())
 			{
 				app.UseDeveloperExceptionPage();
+				factory.AddDebug(LogLevel.Information);
+			}
+			else
+			{
+				factory.AddDebug(LogLevel.Error);
 			}
 
 			app.UseStaticFiles();
@@ -49,6 +64,18 @@ namespace TheWorld
 					defaults: new { controller = "App", action = "Index" }
 				);
 			});
+
+			seeder.EnsureSeedData().Wait();
         }
-    }
+
+		#endregion Methods
+
+		#region Fields
+
+		private IHostingEnvironment _env;
+		private IConfigurationRoot _config;
+
+		#endregion Fields
+
+	}
 }

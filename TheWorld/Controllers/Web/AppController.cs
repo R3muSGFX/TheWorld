@@ -1,5 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
+using TheWorld.Models;
 using TheWorld.Service;
 using TheWorld.ViewModels;
 
@@ -7,18 +11,33 @@ namespace TheWorld.Controllers.Web
 {
 	public class AppController : Controller
     {
-		private IMailService _mailService;
-		private IConfigurationRoot _config;
-
-		public AppController(IMailService mailService, IConfigurationRoot config)
+		
+		public AppController(IMailService mailService, 
+			IConfigurationRoot config, 
+			IWorldRepository repository,
+			ILogger<AppController> logger)
 		{
 			_mailService = mailService;
 			_config = config;
+			_repository = repository;
+			_logger = logger;
 		}
 
-        public IActionResult Index()
+		#region Methods
+
+		public IActionResult Index()
 		{
-			return View();
+			try
+			{
+				var data = _repository.GetAllTrips();
+
+				return View(data);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"Failed to get the fking trips: {ex.Message}");
+				return Redirect("/error");
+			}
 		}
 
 		
@@ -48,5 +67,17 @@ namespace TheWorld.Controllers.Web
 		{
 			return View();
 		}
-    }
+
+		#endregion Methods
+
+		#region Fields
+
+		private IMailService _mailService;
+		private IConfigurationRoot _config;
+		private IWorldRepository _repository;
+		private ILogger<AppController> _logger;
+
+		#endregion Fields
+
+	}
 }
