@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\App\About.cshtml" />
+    <Content Remove="Views\App\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\App\About.cshtml" />
+    <None Include="Views\App\Index.cshtml" />
     <None Include="wwwroot\index.html" />
   </ItemGroup>
 

@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>The World - @ViewBag.Title</title>
+
+		<link rel="stylesheet" href="~/css/site.css" />
+
+	</head>
+
+	<body>
+
+		<div id="sidebar">
+			<img src="~/img/mugshot.jpg" alt="Mug Shot" class="headshot" />
+			<span id="username">shekals</span>
+			<ul class="menu">
+				<li class="active"><a asp-controller="App" asp-action="Index">Home</a></li>
+				<li><a asp-controller="App" asp-action="About">About</a></li>
+				<li><a asp-controller="App" asp-action="Contact">Contact</a></li>
+			</ul>
+		</div>
+
+		<div id="wrapper">
+			<div id="main">
+				<div>
+					<button id="sidebarToggle">Toggle button</button>
+				</div>
+				@RenderBody()
+			</div> <!--- end main -->
+
+			<div id="footer">
+				&copy; @(DateTime.Now.Year) - Moisi Remus - Daniel
+			</div> <!--- end footer -->
+		</div> <!--- end main -->
+
+		<script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+		@RenderSection("scripts", false)
+		<script type="text/javascript" src="~/js/site.js"></script>
+
+	</body>
+</html>
