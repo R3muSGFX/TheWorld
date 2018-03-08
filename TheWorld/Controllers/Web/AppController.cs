@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using TheWorld.Models;
 using TheWorld.Service;
 using TheWorld.ViewModels;
@@ -12,7 +12,8 @@ namespace TheWorld.Controllers.Web
 	public class AppController : Controller
     {
 		
-		public AppController(IMailService mailService, 
+		public AppController(
+			IMailService mailService, 
 			IConfigurationRoot config, 
 			IWorldRepository repository,
 			ILogger<AppController> logger)
@@ -40,6 +41,12 @@ namespace TheWorld.Controllers.Web
 			}
 		}
 
+		[Authorize]
+		public IActionResult Trips()
+		{
+			var trips = _repository.GetAllTrips();
+			return View(trips);
+		}
 		
 		public IActionResult Contact()
 		{

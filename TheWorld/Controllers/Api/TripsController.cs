@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,11 +11,10 @@ using TheWorld.ViewModels;
 
 namespace TheWorld.Controllers.Api
 {
+	[Authorize]
 	[Route("api/trips")]
 	public class TripsController : Controller
     {
-		private IWorldRepository _repository;
-		private ILogger<TripsController> _logger;
 
 		public TripsController(IWorldRepository repository, ILogger<TripsController> logger)
 		{
@@ -22,14 +22,16 @@ namespace TheWorld.Controllers.Api
 			_logger = logger;
 		}
 
+		#region Methods
+
 		[HttpGet]
-        public IActionResult Get()
+		public IActionResult Get()
 		{
 			try
 			{
-				var results = _repository.GetAllTrips().ToList();
+				var trips = _repository.GetUserTripsWithStops(User.Identity.Name);
 
-				return Ok(Mapper.Map<IEnumerable<TripViewModel>>(results));
+				return Ok(Mapper.Map<IEnumerable<TripViewModel>>(trips));
 			}
 			catch (Exception ex)
 			{
@@ -44,6 +46,8 @@ namespace TheWorld.Controllers.Api
 			if (ModelState.IsValid)
 			{
 				var newtrip = Mapper.Map<Trip>(trip);
+				newtrip.Username = User.Identity.Name;
+
 				_repository.AddTrip(newtrip);
 
 				if (await _repository.SaveChangesAsync())
@@ -57,5 +61,15 @@ namespace TheWorld.Controllers.Api
 			}
 			return BadRequest("Failed to save");
 		}
-    }
+
+		#endregion Methods
+
+		#region Fields
+
+		private IWorldRepository _repository;
+		private ILogger<TripsController> _logger;
+
+		#endregion Fields
+
+	}
 }
