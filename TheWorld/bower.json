@@ -5,10 +5,15 @@
     "jquery": "~3.3.1",
     "underscore": "~1.8.3",
     "jquery-validation": "~1.17.0",
-		"jquery-validation-unobtrusive": "~3.2.6",
-		"bootstrap": "~3.3.5",
-		"font-awesome": "~4.4.0",
-		"bootswatch": "3.3.5+2",
-		"angularjs": "1.5.7"
+    "jquery-validation-unobtrusive": "~3.2.6",
+    "bootstrap": "~3.3.5",
+    "font-awesome": "~4.4.0",
+    "bootswatch": "3.3.5+2",
+    "angularjs": "1.6.9",
+		"angular-route": "1.6.9",
+		"travelmap": "~1.0.2"
+  },
+  "resolutions": {
+    "angular": "1.6.9"
   }
 }

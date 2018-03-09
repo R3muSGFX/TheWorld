@@ -13,6 +13,7 @@ using TheWorld.ViewModels;
 namespace TheWorld.Controllers.Api
 {
 	[Authorize]
+	[Route("/api/trips/{tripName}/stops")]
 	public class StopsController : Controller
     {
 		
@@ -28,7 +29,7 @@ namespace TheWorld.Controllers.Api
 
 		#region Methods
 
-		[HttpGet("/api/trips/{tripName}/stops")]
+		[HttpGet("")]
 		public IActionResult Get(string tripName)
 		{
 			try

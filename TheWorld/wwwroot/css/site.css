@@ -76,3 +76,8 @@ textarea {
 	margin-left: 0;
 	transition: margin-left ease .25s;
 }
+
+#map {
+	width: 100%;
+	height: 600px;
+}

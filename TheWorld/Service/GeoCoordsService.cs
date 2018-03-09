@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -27,13 +28,13 @@ namespace TheWorld.Service
 			};
 
 			var apiKey = _config["Keys:BingMapsKey"];
-			var encodeName = WebUtility.UrlEncode(name);
-			var url = $"http://dev.virtualearth.met/REST/v1/Locations?q={encodeName}&key={apiKey}";
+			var encodedName = WebUtility.UrlEncode(name);
+			var url = $"http://dev.virtualearth.net/REST/v1/Locations?q={encodedName}&key={apiKey}";
 
 			var client = new HttpClient();
 
 			var json = await client.GetStringAsync(url);
-
+			
 			var results = JObject.Parse(json);
 			var resources = results["resourceSets"][0]["resources"];
 			if (!resources.HasValues)
